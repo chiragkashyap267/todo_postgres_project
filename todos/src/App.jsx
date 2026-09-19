@@ -7,10 +7,11 @@ function App() {
 
   const [todos , setTodos] = useState([]);
   const [title, setTitle] = useState('');
+  const API = import.meta.env.VITE_API_URL || 'http:localhost:3000';
 
 
   useEffect( () => {
-    fetch('http://localhost:3000/api/todos')
+    fetch(`${API}/api/todos`)
     .then( res => res.json())
     .then(data => setTodos(data))
   } ,[]);
@@ -20,7 +21,7 @@ function App() {
 
     if( !title.trim() ) return
 
-    const res = await fetch ('http://localhost:3000/api/todos',{
+    const res = await fetch (`${API}/api/todos`,{
       method: 'POST',
       headers : { 'Content-type' : 'application/json'},
       body : JSON.stringify({title}),
@@ -32,13 +33,13 @@ function App() {
   }
   
   async function deleteTodo(id) {
-    await fetch(`http://localhost:3000/api/todos/${id}` , {method : 'DELETE' })
+    await fetch(`${API}/api/todos${id}` , {method : 'DELETE' })
     setTodos(todos.filter( t => t.id !== id))
   }
 
 
   async function done(todo){
-    const result = await fetch(`http://localhost:3000/api/todos/${todo.id}` ,{
+    const result = await fetch(`${API}/api/todos/${todo.id}` ,{
       method : 'PATCH',
       headers : { 'Content-type' : 'application/json'},
       body : JSON.stringify({ done : !todo.done}),
